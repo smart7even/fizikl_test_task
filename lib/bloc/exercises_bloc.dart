@@ -98,7 +98,8 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
       if (curState is ExercisesLoadSuccess) {
         List<OrderedExercise> orderedExercises =
             ExercisesMapper.mapToOrderedExercises(curState.exercises);
-        for (var exercise in orderedExercises) {
+        for (int i = 0; i < orderedExercises.length; i++) {
+          var exercise = orderedExercises[i];
           if (exercise.id == event.exerciseId) {
             orderedExercises.remove(exercise);
           }

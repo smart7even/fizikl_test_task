@@ -30,10 +30,16 @@ class ExercisesListView extends StatelessWidget {
           itemBuilder: (context, index) {
             final exercise = orderedExercises[index];
             return ExerciseTile(
-                key: Key('Exercise ${exercise.id}'),
-                id: exercise.id,
-                order: exercise.order.toString(),
-                orderColor: colors[exercise.order % colors.length]);
+              key: Key('Exercise ${exercise.id}'),
+              id: exercise.id,
+              order: exercise.order.toString(),
+              orderColor: colors[exercise.order % colors.length],
+              onDissmiss: (int id) {
+                BlocProvider.of<ExercisesBloc>(context).add(
+                  ExerciseDeletePressed(exerciseId: id),
+                );
+              },
+            );
           },
           onReorder: (int oldIndex, int newIndex) {
             BlocProvider.of<ExercisesBloc>(context).add(
