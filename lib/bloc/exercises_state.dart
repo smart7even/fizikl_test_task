@@ -15,4 +15,8 @@ class ExercisesLoadSuccess extends ExercisesState {
   });
 }
 
-class ExercisesLoadError {}
+class ExercisesLoadError extends ExercisesState {}
+
+class ExercisesSaveError extends ExercisesState {}
+
+class ExercisesReorderError extends ExercisesState {}
