@@ -28,7 +28,7 @@ void main() {
     expect(
       exercises,
       equals(
-        [
+        const [
           SingleExercise(id: 1),
           Superset(exercises: [
             SingleExercise(id: 2),
@@ -44,7 +44,7 @@ void main() {
       ),
     );
 
-    exercises.add(Superset(exercises: [
+    exercises.add(const Superset(exercises: [
       SingleExercise(id: 8),
       SingleExercise(id: 9),
     ]));
@@ -55,18 +55,18 @@ void main() {
       exercises,
       equals(
         [
-          SingleExercise(id: 1),
-          Superset(exercises: [
+          const SingleExercise(id: 1),
+          const Superset(exercises: [
             SingleExercise(id: 2),
             SingleExercise(id: 3),
             SingleExercise(id: 4)
           ]),
-          SingleExercise(id: 5),
-          Superset(exercises: [
+          const SingleExercise(id: 5),
+          const Superset(exercises: [
             SingleExercise(id: 6),
             SingleExercise(id: 7),
           ]),
-          Superset(exercises: [
+          const Superset(exercises: [
             SingleExercise(id: 8),
             SingleExercise(id: 9),
           ])

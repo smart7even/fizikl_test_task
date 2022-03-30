@@ -24,9 +24,9 @@ class ExercisesListView extends StatelessWidget {
     return BlocBuilder<ExercisesBloc, ExercisesState>(
       builder: (context, state) {
         if (state is ExercisesInitial) {
-          return LinearProgressIndicator();
+          return const LinearProgressIndicator();
         } else if (state is ExercisesLoadInProgress) {
-          return LinearProgressIndicator();
+          return const LinearProgressIndicator();
         } else if (state is ExercisesLoadSuccess) {
           List<OrderedExercise> orderedExercises =
               ExercisesMapper.mapToOrderedExercises(state.exercises);
@@ -53,7 +53,7 @@ class ExercisesListView extends StatelessWidget {
           );
         }
 
-        return Text('Error');
+        return const Text('Error');
       },
     );
   }
