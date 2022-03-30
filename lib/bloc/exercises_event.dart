@@ -16,3 +16,13 @@ class ExercisesItemReordered implements ExercisesEvent {
 }
 
 class ExercisesSavePressed implements ExercisesEvent {}
+
+class ExercisesAddPressed implements ExercisesEvent {}
+
+class ExerciseDeletePressed implements ExercisesEvent {
+  final int exerciseId;
+
+  ExerciseDeletePressed({
+    required this.exerciseId,
+  });
+}

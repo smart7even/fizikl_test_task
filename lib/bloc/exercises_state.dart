@@ -17,6 +17,10 @@ class ExercisesLoadSuccess extends ExercisesState with EquatableMixin {
     required this.exercises,
   });
 
+  ExercisesLoadSuccess copyWith({List<IExercise>? exercises}) {
+    return ExercisesLoadSuccess(exercises: exercises ?? this.exercises);
+  }
+
   @override
   List<Object?> get props => [exercises];
 }
