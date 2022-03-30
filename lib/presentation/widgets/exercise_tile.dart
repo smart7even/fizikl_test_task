@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class ExerciseTile extends StatelessWidget {
   const ExerciseTile({
     Key? key,
-    required this.title,
+    required this.id,
     required this.order,
     required this.orderColor,
   }) : super(key: key);
 
-  final String title;
+  final int id;
   final String order;
   final Color orderColor;
 
@@ -43,7 +43,7 @@ class ExerciseTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                'Exercise $id',
                 style: const TextStyle(fontFamily: "Lato"),
               ),
             ],
