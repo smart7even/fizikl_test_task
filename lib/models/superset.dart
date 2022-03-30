@@ -12,4 +12,7 @@ class Superset extends Equatable implements IExercise {
 
   @override
   List<Object?> get props => [exercises];
+
+  @override
+  int get count => exercises.length;
 }

@@ -10,4 +10,7 @@ class SingleExercise extends Equatable implements IExercise {
 
   @override
   List<Object?> get props => [id];
+
+  @override
+  int get count => 1;
 }

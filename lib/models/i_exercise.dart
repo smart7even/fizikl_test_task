@@ -1,1 +1,3 @@
-abstract class IExercise {}
+abstract class IExercise {
+  int get count;
+}
