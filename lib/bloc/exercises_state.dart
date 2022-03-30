@@ -5,14 +5,20 @@ abstract class ExercisesState {}
 
 class ExercisesInitial extends ExercisesState {}
 
-class ExercisesLoadInProgress extends ExercisesState {}
+class ExercisesLoadInProgress extends ExercisesState with EquatableMixin {
+  @override
+  List<Object?> get props => [];
+}
 
-class ExercisesLoadSuccess extends ExercisesState {
+class ExercisesLoadSuccess extends ExercisesState with EquatableMixin {
   final List<IExercise> exercises;
 
   ExercisesLoadSuccess({
     required this.exercises,
   });
+
+  @override
+  List<Object?> get props => [exercises];
 }
 
 class ExercisesLoadError extends ExercisesState {}

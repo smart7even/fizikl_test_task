@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:fizikl_test_task/data/repository/exercise_repository_exceptions.dart';
 import 'package:fizikl_test_task/data/repository/i_exercise_repository.dart';
 import 'package:fizikl_test_task/models/i_exercise.dart';
