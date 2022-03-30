@@ -20,7 +20,7 @@ class ExercisesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ReorderableListView.builder(
-      buildDefaultDragHandles: true,
+      buildDefaultDragHandles: buildDefaultDragHandles,
       proxyDecorator: (child, index, animation) {
         return child;
       },
