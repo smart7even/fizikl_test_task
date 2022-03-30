@@ -1,9 +1,9 @@
-import 'package:fizikl_test_task/datasource/inmemory_exercises_datasource.dart';
+import 'package:fizikl_test_task/data/datasource/inmemory_exercises_datasource.dart';
+import 'package:fizikl_test_task/data/repository/exercise_repository.dart';
 import 'package:fizikl_test_task/models/i_exercise.dart';
 import 'package:fizikl_test_task/models/ordered_exercise.dart';
 import 'package:fizikl_test_task/models/single_exercise.dart';
 import 'package:fizikl_test_task/models/superset.dart';
-import 'package:fizikl_test_task/repository/exercise_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _defaultData = <Map<String, dynamic>>[

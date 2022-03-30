@@ -1,7 +1,7 @@
-import 'package:fizikl_test_task/datasource/i_exercises_datasource.dart';
+import 'package:fizikl_test_task/data/datasource/i_exercises_datasource.dart';
+import 'package:fizikl_test_task/data/repository/i_exercise_repository.dart';
 import 'package:fizikl_test_task/models/i_exercise.dart';
 import 'package:fizikl_test_task/models/ordered_exercise.dart';
-import 'package:fizikl_test_task/repository/i_exercise_repository.dart';
 import 'package:fizikl_test_task/services/exercises_mapper.dart';
 
 class ExerciseRepository implements IExerciseRepository {

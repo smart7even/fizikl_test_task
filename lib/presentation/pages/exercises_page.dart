@@ -1,6 +1,6 @@
 import 'package:fizikl_test_task/bloc/exercises_bloc.dart';
+import 'package:fizikl_test_task/presentation/widgets/exercises_list.dart';
 import 'package:fizikl_test_task/services/exercises_reorderer.dart';
-import 'package:fizikl_test_task/widgets/exercises_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +18,7 @@ class ExercisesPage extends StatelessWidget {
         bloc.add(ExercisesLoadStarted());
         return bloc;
       },
-      child: const ExercisesListView(),
+      child: const ExercisesList(),
     );
   }
 }

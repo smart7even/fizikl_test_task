@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:fizikl_test_task/data/repository/exercise_repository_exceptions.dart';
+import 'package:fizikl_test_task/data/repository/i_exercise_repository.dart';
 import 'package:fizikl_test_task/models/i_exercise.dart';
-import 'package:fizikl_test_task/repository/exercise_repository_exceptions.dart';
-import 'package:fizikl_test_task/repository/i_exercise_repository.dart';
 import 'package:fizikl_test_task/services/exercises_reorderer.dart';
 import 'package:meta/meta.dart';
 

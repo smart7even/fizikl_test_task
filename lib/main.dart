@@ -1,12 +1,13 @@
-import 'package:fizikl_test_task/datasource/inmemory_exercises_datasource.dart';
+import 'package:fizikl_test_task/data/repository/exercise_repository.dart';
 import 'package:fizikl_test_task/models/ordered_exercise.dart';
-import 'package:fizikl_test_task/pages/exercises_page.dart';
-import 'package:fizikl_test_task/repository/exercise_repository.dart';
-import 'package:fizikl_test_task/repository/i_exercise_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+import 'data/datasource/inmemory_exercises_datasource.dart';
+import 'data/repository/i_exercise_repository.dart';
+import 'presentation/pages/exercises_page.dart';
+
+void main() async {
   runApp(const MyApp());
 }
 

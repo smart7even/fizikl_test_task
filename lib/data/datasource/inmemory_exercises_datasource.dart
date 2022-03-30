@@ -1,5 +1,6 @@
-import 'package:fizikl_test_task/datasource/i_exercises_datasource.dart';
 import 'package:fizikl_test_task/models/ordered_exercise.dart';
+
+import 'i_exercises_datasource.dart';
 
 class InMemoryExercisesDatasource implements IExercisesDatasource {
   List<OrderedExercise> exercises;
