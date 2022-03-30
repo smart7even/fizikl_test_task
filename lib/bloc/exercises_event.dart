@@ -14,3 +14,5 @@ class ExercisesItemReordered implements ExercisesEvent {
     required this.newIndex,
   });
 }
+
+class ExercisesSavePressed implements ExercisesEvent {}

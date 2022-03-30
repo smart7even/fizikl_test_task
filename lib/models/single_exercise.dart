@@ -13,4 +13,9 @@ class SingleExercise extends Equatable implements IExercise {
 
   @override
   int get count => 1;
+
+  @override
+  IExercise copy() {
+    return SingleExercise(id: id);
+  }
 }

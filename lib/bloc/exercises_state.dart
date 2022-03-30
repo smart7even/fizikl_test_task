@@ -17,6 +17,12 @@ class ExercisesLoadSuccess extends ExercisesState {
 
 class ExercisesLoadError extends ExercisesState {}
 
-class ExercisesSaveError extends ExercisesState {}
+class ExercisesSaveError extends ExercisesState {
+  final List<IExercise> exercises;
+
+  ExercisesSaveError({
+    required this.exercises,
+  });
+}
 
 class ExercisesReorderError extends ExercisesState {}

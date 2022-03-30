@@ -35,18 +35,34 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
       if (curState is ExercisesLoadSuccess) {
         try {
           final newExercises = exercisesReorderer.reorder(
-            [...curState.exercises],
+            [...curState.exercises.map((e) => e.copy())],
             event.oldIndex,
             event.newIndex,
           );
+
           await exerciseRepository.saveExercises(newExercises);
+
           emit(ExercisesLoadSuccess(exercises: newExercises));
         } on ExercisesReorderException {
-          log('Error while reordering tasks');
+          log('Error while reordering exercises');
           emit(ExercisesReorderError());
         } on ExercisesSaveFailedException {
-          log('Error while saving reordered tasks');
-          emit(ExercisesReorderError());
+          log('Error while saving reordered exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
+        }
+      }
+    }));
+
+    on<ExercisesSavePressed>(((event, emit) async {
+      var curState = state;
+
+      if (curState is ExercisesSaveError) {
+        try {
+          await exerciseRepository.saveExercises(curState.exercises);
+          emit(ExercisesLoadSuccess(exercises: curState.exercises));
+        } on ExercisesSaveFailedException {
+          log('Error while saving exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
         }
       }
     }));

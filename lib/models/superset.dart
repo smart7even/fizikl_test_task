@@ -15,4 +15,11 @@ class Superset extends Equatable implements IExercise {
 
   @override
   int get count => exercises.length;
+
+  @override
+  IExercise copy() {
+    return Superset(
+      exercises: exercises.map((e) => e.copy() as SingleExercise).toList(),
+    );
+  }
 }

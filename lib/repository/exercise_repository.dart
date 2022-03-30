@@ -19,7 +19,7 @@ class ExerciseRepository implements IExerciseRepository {
 
   @override
   Future<void> saveExercises(List<IExercise> exercises) async {
-    _exercisesDataSource.saveExercises(
+    await _exercisesDataSource.saveExercises(
       ExercisesMapper.mapToOrderedExercises(exercises),
     );
   }
