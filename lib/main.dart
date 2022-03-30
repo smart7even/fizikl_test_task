@@ -5,6 +5,7 @@ import 'package:fizikl_test_task/models/single_exercise.dart';
 import 'package:fizikl_test_task/models/superset.dart';
 import 'package:fizikl_test_task/repository/exercise_repository.dart';
 import 'package:fizikl_test_task/repository/i_exercise_repository.dart';
+import 'package:fizikl_test_task/services/exercises_mapper.dart';
 import 'package:fizikl_test_task/widgets/exercise_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -86,42 +87,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 class ExercisesListView extends StatelessWidget {
   const ExercisesListView({Key? key}) : super(key: key);
 
-  List<Widget> _buildExercises(List<IExercise> exercises) {
-    List<Color> colors = [
-      const Color(0xFF10CF5C),
-      const Color(0xFF599CFF),
-      const Color(0xFFB2F28A),
-      const Color(0xFFC3FE1C),
-      const Color(0xFFC6FEE3),
-      const Color(0xFFF48484),
-      const Color(0xFFF49E4E),
-    ];
-
-    final exercisesWidgets = <Widget>[];
-
-    for (int index = 0; index < exercises.length; index += 1) {
-      final exercise = exercises[index];
-
-      if (exercise is SingleExercise) {
-        exercisesWidgets.add(ExerciseTile(
-          key: Key(exercise.id.toString()),
-          title: 'Exercise ${exercise.id}',
-          order: (index + 1).toString(),
-          orderColor: colors[index % colors.length],
-        ));
-      } else if (exercise is Superset) {
-        for (var singleExercise in exercise.exercises) {
-          exercisesWidgets.add(ExerciseTile(
-              key: Key(singleExercise.id.toString()),
-              title: 'Exercise ${singleExercise.id}',
-              order: (index + 1).toString(),
-              orderColor: colors[index % colors.length]));
-        }
-      }
-    }
-
-    return exercisesWidgets;
-  }
+  final List<Color> colors = const [
+    Color(0xFF10CF5C),
+    Color(0xFF599CFF),
+    Color(0xFFB2F28A),
+    Color(0xFFC3FE1C),
+    Color(0xFFC6FEE3),
+    Color(0xFFF48484),
+    Color(0xFFF49E4E),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -132,27 +106,28 @@ class ExercisesListView extends StatelessWidget {
         } else if (state is ExercisesLoadInProgress) {
           return LinearProgressIndicator();
         } else if (state is ExercisesLoadSuccess) {
-          return ReorderableListView(
+          List<OrderedExercise> orderedExercises =
+              ExercisesMapper.mapToOrderedExercises(state.exercises);
+
+          return ReorderableListView.builder(
             proxyDecorator: (child, index, animation) {
-              print('Reordering ${index}');
               return child;
             },
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-            children: _buildExercises(state.exercises),
+            itemBuilder: (context, index) {
+              return ExerciseTile(
+                  key: Key('Exercise ${orderedExercises[index].id}'),
+                  title: 'Exercise ${orderedExercises[index].id}',
+                  order: orderedExercises[index].order.toString(),
+                  orderColor:
+                      colors[orderedExercises[index].order % colors.length]);
+            },
             onReorder: (int oldIndex, int newIndex) {
-              debugPrint(oldIndex.toString());
-              debugPrint(newIndex.toString());
               BlocProvider.of<ExercisesBloc>(context).add(
                 ExercisesItemReordered(oldIndex: oldIndex, newIndex: newIndex),
               );
-              // setState(() {
-              //   if (oldIndex < newIndex) {
-              //     newIndex -= 1;
-              //   }
-              //   final int item = _items.removeAt(oldIndex);
-              //   _items.insert(newIndex, item);
-              // });
             },
+            itemCount: orderedExercises.length,
           );
         }
 
