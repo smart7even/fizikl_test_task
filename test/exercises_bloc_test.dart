@@ -173,6 +173,119 @@ void main() {
           ]),
         ],
       );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'adding new exercise works correctly',
+        build: () => exercisesBloc,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(ExercisesAddPressed());
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ]),
+            SingleExercise(id: 8),
+          ])
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'delete single exercise works correctly',
+        build: () => exercisesBloc,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(ExerciseDeletePressed(exerciseId: 5));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ]),
+          ])
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'delete exercise from superset works correctly',
+        build: () => exercisesBloc,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(ExerciseDeletePressed(exerciseId: 3));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 4),
+            ]),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ]),
+          ])
+        ],
+      );
     },
   );
 }
