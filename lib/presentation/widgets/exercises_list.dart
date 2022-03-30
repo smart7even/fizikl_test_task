@@ -30,7 +30,10 @@ class ExercisesList extends StatelessWidget {
               ExercisesMapper.mapToOrderedExercises(state.exercises);
 
           return ExercisesListView(
-              orderedExercises: orderedExercises, colors: colors);
+            orderedExercises: orderedExercises,
+            colors: colors,
+            buildDefaultDragHandles: true,
+          );
         } else if (state is ExercisesSaveError) {
           List<OrderedExercise> orderedExercises =
               ExercisesMapper.mapToOrderedExercises(state.exercises);

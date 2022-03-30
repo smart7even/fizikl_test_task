@@ -10,15 +10,17 @@ class ExercisesListView extends StatelessWidget {
     Key? key,
     required this.orderedExercises,
     required this.colors,
+    required this.buildDefaultDragHandles,
   }) : super(key: key);
 
   final List<OrderedExercise> orderedExercises;
   final List<Color> colors;
+  final bool buildDefaultDragHandles;
 
   @override
   Widget build(BuildContext context) {
     return ReorderableListView.builder(
-      buildDefaultDragHandles: false,
+      buildDefaultDragHandles: true,
       proxyDecorator: (child, index, animation) {
         return child;
       },

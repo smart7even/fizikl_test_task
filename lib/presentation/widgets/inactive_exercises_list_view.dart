@@ -41,7 +41,10 @@ class InactiveExercisesListView extends StatelessWidget {
         ),
         Expanded(
           child: ExercisesListView(
-              orderedExercises: orderedExercises, colors: colors),
+            orderedExercises: orderedExercises,
+            colors: colors,
+            buildDefaultDragHandles: false,
+          ),
         ),
       ],
     );
