@@ -87,12 +87,20 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
 
         SingleExercise newExercise = SingleExercise(id: newExerciseId);
 
-        emit(
-            curState.copyWith(exercises: [...curState.exercises, newExercise]));
+        final newState =
+            curState.copyWith(exercises: [...curState.exercises, newExercise]);
+
+        try {
+          await exerciseRepository.saveExercises(newState.exercises);
+          emit(ExercisesLoadSuccess(exercises: newState.exercises));
+        } on ExercisesSaveFailedException {
+          log('Error while saving exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
+        }
       }
     });
 
-    on<ExerciseDeletePressed>((event, emit) {
+    on<ExerciseDeletePressed>((event, emit) async {
       var curState = state;
 
       if (curState is ExercisesLoadSuccess) {
@@ -105,11 +113,16 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
           }
         }
 
-        emit(
-          ExercisesLoadSuccess(
-            exercises: ExercisesMapper.mapOrderedExercises(orderedExercises),
-          ),
-        );
+        final newExercises =
+            ExercisesMapper.mapOrderedExercises(orderedExercises);
+
+        try {
+          await exerciseRepository.saveExercises(newExercises);
+          emit(ExercisesLoadSuccess(exercises: newExercises));
+        } on ExercisesSaveFailedException {
+          log('Error while saving exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
+        }
       }
     });
   }
