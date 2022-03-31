@@ -1,13 +1,10 @@
 import 'package:fizikl_test_task/constants.dart';
 import 'package:fizikl_test_task/data/datasource/local_exercises_datasource.dart';
 import 'package:fizikl_test_task/data/repository/exercise_repository.dart';
-import 'package:fizikl_test_task/models/ordered_exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'data/datasource/inmemory_exercises_datasource.dart';
 import 'data/repository/i_exercise_repository.dart';
 import 'presentation/pages/exercises_page.dart';
 
