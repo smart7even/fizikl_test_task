@@ -42,3 +42,19 @@ class ExerciseMergeDownPressed implements ExercisesEvent {
     required this.exerciseId,
   });
 }
+
+class SupersetMoveUpPressed implements ExercisesEvent {
+  final int exerciseId;
+
+  SupersetMoveUpPressed({
+    required this.exerciseId,
+  });
+}
+
+class SupersetMoveDownPressed implements ExercisesEvent {
+  final int exerciseId;
+
+  SupersetMoveDownPressed({
+    required this.exerciseId,
+  });
+}

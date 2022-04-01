@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum ExerciseTileButtonsType { disabled, merge, moveSuperset }
+
 class ExerciseTile extends StatelessWidget {
   const ExerciseTile(
       {Key? key,
@@ -9,7 +11,7 @@ class ExerciseTile extends StatelessWidget {
       required this.onDissmiss,
       required this.onAboveClick,
       required this.onBelowClick,
-      required this.belowAndAboveButtonsEnabled})
+      required this.buttonsType})
       : super(key: key);
 
   final int id;
@@ -18,7 +20,53 @@ class ExerciseTile extends StatelessWidget {
   final Function(int id) onDissmiss;
   final Function(int id) onAboveClick;
   final Function(int id) onBelowClick;
-  final bool belowAndAboveButtonsEnabled;
+  final ExerciseTileButtonsType buttonsType;
+
+  Widget _buildButtons() {
+    if (buttonsType == ExerciseTileButtonsType.disabled) {
+      return const SizedBox.shrink();
+    }
+
+    return Row(
+      children: [
+        Material(
+          color: Colors.transparent,
+          type: MaterialType.button,
+          child: IconButton(
+            onPressed: () {
+              onAboveClick(id);
+            },
+            icon: Icon(
+              Icons.arrow_upward,
+              color: buttonsType == ExerciseTileButtonsType.merge
+                  ? Colors.black
+                  : Colors.blue,
+            ),
+            tooltip: buttonsType == ExerciseTileButtonsType.merge
+                ? "Merge with exercise above"
+                : "Move superset up",
+          ),
+        ),
+        Material(
+          color: Colors.transparent,
+          child: IconButton(
+            onPressed: () {
+              onBelowClick(id);
+            },
+            icon: Icon(
+              Icons.arrow_downward,
+              color: buttonsType == ExerciseTileButtonsType.merge
+                  ? Colors.black
+                  : Colors.blue,
+            ),
+            tooltip: buttonsType == ExerciseTileButtonsType.merge
+                ? "Merge with exercise below"
+                : "Move superset down",
+          ),
+        )
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,32 +113,7 @@ class ExerciseTile extends StatelessWidget {
                 ),
               ],
             ),
-            if (belowAndAboveButtonsEnabled)
-              Row(
-                children: [
-                  Material(
-                    color: Colors.transparent,
-                    type: MaterialType.button,
-                    child: IconButton(
-                      onPressed: () {
-                        onAboveClick(id);
-                      },
-                      icon: const Icon(Icons.arrow_upward),
-                      tooltip: "Merge with exercise above",
-                    ),
-                  ),
-                  Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      onPressed: () {
-                        onBelowClick(id);
-                      },
-                      icon: const Icon(Icons.arrow_downward),
-                      tooltip: "Merge with exercise below",
-                    ),
-                  )
-                ],
-              )
+            _buildButtons()
           ],
         ),
       ),
