@@ -196,14 +196,14 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
                     i,
                     Superset(
                       exercises: [
-                        secondExercise,
                         exercise,
+                        secondExercise,
                       ],
                     ),
                   );
                 } else if (secondExercise is Superset) {
                   curState.exercises.removeAt(i);
-                  secondExercise.exercises.add(exercise);
+                  secondExercise.exercises.insert(0, exercise);
                 }
               }
             }
@@ -213,6 +213,63 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
         try {
           await exerciseRepository.saveExercises(curState.exercises);
           emit(curState);
+        } on ExercisesSaveFailedException {
+          log('Error while saving exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
+        }
+      }
+    }));
+
+    on<SupersetMoveUpPressed>(((event, emit) async {
+      var curState = state;
+
+      if (curState is ExercisesLoadSuccess) {
+        var exercises = curState.exercises.map((e) => e.copy()).toList();
+
+        for (int i = 1; i < exercises.length; i++) {
+          IExercise exercise = exercises[i];
+          if (exercise is Superset) {
+            if (exercise.exercises[0].id == event.exerciseId) {
+              final replacedExercise = exercises[i - 1];
+
+              exercises
+                  .replaceRange(i - 1, i + 1, [exercise, replacedExercise]);
+              break;
+            }
+          }
+        }
+
+        try {
+          await exerciseRepository.saveExercises(exercises);
+          emit(ExercisesLoadSuccess(exercises: exercises));
+        } on ExercisesSaveFailedException {
+          log('Error while saving exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
+        }
+      }
+    }));
+
+    on<SupersetMoveDownPressed>(((event, emit) async {
+      var curState = state;
+
+      if (curState is ExercisesLoadSuccess) {
+        var exercises = curState.exercises.map((e) => e.copy()).toList();
+
+        for (int i = 0; i < exercises.length - 1; i++) {
+          IExercise exercise = exercises[i];
+          if (exercise is Superset) {
+            if (exercise.exercises[0].id == event.exerciseId) {
+              final replacedExercise = exercises[i + 1];
+
+              exercises.replaceRange(i, i + 2, [replacedExercise, exercise]);
+              break;
+            }
+          }
+        }
+
+        try {
+          await exerciseRepository.saveExercises(exercises);
+          emit(ExercisesLoadSuccess(exercises: exercises));
         } on ExercisesSaveFailedException {
           log('Error while saving exercises');
           emit(ExercisesSaveError(exercises: curState.exercises));
