@@ -8,6 +8,7 @@ import 'package:fizikl_test_task/data/repository/i_exercise_repository.dart';
 import 'package:fizikl_test_task/models/i_exercise.dart';
 import 'package:fizikl_test_task/models/ordered_exercise.dart';
 import 'package:fizikl_test_task/models/single_exercise.dart';
+import 'package:fizikl_test_task/models/superset.dart';
 import 'package:fizikl_test_task/services/exercises_mapper.dart';
 import 'package:fizikl_test_task/services/exercises_reorderer.dart';
 import 'package:meta/meta.dart';
@@ -125,5 +126,98 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
         }
       }
     });
+
+    on<ExerciseMergeUpPressed>(((event, emit) async {
+      var curState = state;
+      if (curState is ExercisesLoadSuccess) {
+        curState = ExercisesLoadSuccess(
+          exercises: curState.exercises.map((e) => e.copy()).toList(),
+        );
+
+        for (int i = 0; i < curState.exercises.length; i++) {
+          IExercise exercise = curState.exercises[i];
+
+          if (exercise is SingleExercise) {
+            if (exercise.id == event.exerciseId) {
+              if (i - 1 >= 0) {
+                IExercise secondExercise = curState.exercises[i - 1];
+
+                if (secondExercise is SingleExercise) {
+                  curState.exercises.removeAt(i);
+                  curState.exercises.removeAt(i - 1);
+                  curState.exercises.insert(
+                    i - 1,
+                    Superset(
+                      exercises: [
+                        secondExercise,
+                        exercise,
+                      ],
+                    ),
+                  );
+                } else if (secondExercise is Superset) {
+                  curState.exercises.removeAt(i);
+                  secondExercise.exercises.add(exercise);
+                }
+              }
+            }
+          }
+        }
+
+        try {
+          await exerciseRepository.saveExercises(curState.exercises);
+          emit(curState);
+        } on ExercisesSaveFailedException {
+          log('Error while saving exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
+        }
+      }
+    }));
+
+    on<ExerciseMergeDownPressed>(((event, emit) async {
+      var curState = state;
+      if (curState is ExercisesLoadSuccess) {
+        curState = ExercisesLoadSuccess(
+          exercises: curState.exercises.map((e) => e.copy()).toList(),
+        );
+
+        for (int i = 0; i < curState.exercises.length; i++) {
+          IExercise exercise = curState.exercises[i];
+
+          if (exercise is SingleExercise) {
+            if (exercise.id == event.exerciseId) {
+              if (i + 1 < curState.exercises.length) {
+                IExercise secondExercise = curState.exercises[i + 1];
+
+                if (secondExercise is SingleExercise) {
+                  curState.exercises.removeAt(i + 1);
+                  curState.exercises.removeAt(i);
+
+                  curState.exercises.insert(
+                    i,
+                    Superset(
+                      exercises: [
+                        secondExercise,
+                        exercise,
+                      ],
+                    ),
+                  );
+                } else if (secondExercise is Superset) {
+                  curState.exercises.removeAt(i);
+                  secondExercise.exercises.add(exercise);
+                }
+              }
+            }
+          }
+        }
+
+        try {
+          await exerciseRepository.saveExercises(curState.exercises);
+          emit(curState);
+        } on ExercisesSaveFailedException {
+          log('Error while saving exercises');
+          emit(ExercisesSaveError(exercises: curState.exercises));
+        }
+      }
+    }));
   }
 }

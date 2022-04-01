@@ -26,3 +26,19 @@ class ExerciseDeletePressed implements ExercisesEvent {
     required this.exerciseId,
   });
 }
+
+class ExerciseMergeUpPressed implements ExercisesEvent {
+  final int exerciseId;
+
+  ExerciseMergeUpPressed({
+    required this.exerciseId,
+  });
+}
+
+class ExerciseMergeDownPressed implements ExercisesEvent {
+  final int exerciseId;
+
+  ExerciseMergeDownPressed({
+    required this.exerciseId,
+  });
+}

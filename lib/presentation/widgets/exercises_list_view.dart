@@ -26,7 +26,8 @@ class ExercisesListView extends StatelessWidget {
           proxyDecorator: (child, index, animation) {
             return child;
           },
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 70),
           itemBuilder: (context, index) {
             final exercise = orderedExercises[index];
             return ExerciseTile(
@@ -39,6 +40,17 @@ class ExercisesListView extends StatelessWidget {
                   ExerciseDeletePressed(exerciseId: id),
                 );
               },
+              onAboveClick: (int id) {
+                BlocProvider.of<ExercisesBloc>(context).add(
+                  ExerciseMergeUpPressed(exerciseId: id),
+                );
+              },
+              onBelowClick: (int id) {
+                BlocProvider.of<ExercisesBloc>(context).add(
+                  ExerciseMergeDownPressed(exerciseId: id),
+                );
+              },
+              belowAndAboveButtonsEnabled: exercise.orderPrefix.isEmpty,
             );
           },
           onReorder: (int oldIndex, int newIndex) {

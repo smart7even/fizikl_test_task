@@ -16,32 +16,10 @@ class ExercisesReorderer {
       return exercises;
     }
 
-    SingleExercise? reorderedExercise;
-
-    int currentSearchIndex = -1;
-    for (var exercise in exercises) {
-      if (currentSearchIndex + exercise.count >= oldIndex) {
-        if (exercise is Superset) {
-          reorderedExercise =
-              exercise.exercises[oldIndex - currentSearchIndex - 1];
-          exercise.exercises.removeAt(oldIndex - currentSearchIndex - 1);
-
-          if (exercise.count == 1) {
-            exercises[exercises.indexOf(exercise)] = exercise.exercises[0];
-          } else if (exercise.count == 0) {
-            exercises.remove(exercise);
-          }
-
-          break;
-        } else if (exercise is SingleExercise) {
-          reorderedExercise = exercise;
-          exercises.remove(exercise);
-          break;
-        }
-      } else {
-        currentSearchIndex += exercise.count;
-      }
-    }
+    SingleExercise? reorderedExercise = _findByExerciseIndex(
+      exercises,
+      oldIndex,
+    );
 
     if (reorderedExercise is! SingleExercise) {
       throw ExercisesReorderException();
@@ -84,6 +62,37 @@ class ExercisesReorderer {
     }
 
     return newExercises;
+  }
+
+  SingleExercise? _findByExerciseIndex(List<IExercise> exercises, int index) {
+    SingleExercise? reorderedExercise;
+
+    int currentSearchIndex = -1;
+    for (var exercise in exercises) {
+      if (currentSearchIndex + exercise.count >= index) {
+        if (exercise is Superset) {
+          reorderedExercise =
+              exercise.exercises[index - currentSearchIndex - 1];
+          exercise.exercises.removeAt(index - currentSearchIndex - 1);
+
+          if (exercise.count == 1) {
+            exercises[exercises.indexOf(exercise)] = exercise.exercises[0];
+          } else if (exercise.count == 0) {
+            exercises.remove(exercise);
+          }
+
+          break;
+        } else if (exercise is SingleExercise) {
+          reorderedExercise = exercise;
+          exercises.remove(exercise);
+          break;
+        }
+      } else {
+        currentSearchIndex += exercise.count;
+      }
+    }
+
+    return reorderedExercise;
   }
 }
 
