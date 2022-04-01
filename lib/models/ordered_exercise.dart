@@ -16,4 +16,12 @@ class OrderedExercise {
       orderPrefix: json['order_prefix'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'order': order,
+      'order_prefix': orderPrefix,
+    };
+  }
 }

@@ -26,9 +26,20 @@ class ExercisesListView extends StatelessWidget {
           proxyDecorator: (child, index, animation) {
             return child;
           },
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 70),
           itemBuilder: (context, index) {
             final exercise = orderedExercises[index];
+
+            ExerciseTileButtonsType buttonsType =
+                ExerciseTileButtonsType.disabled;
+
+            if (exercise.orderPrefix == 'a') {
+              buttonsType = ExerciseTileButtonsType.moveSuperset;
+            } else if (exercise.orderPrefix.isEmpty) {
+              buttonsType = ExerciseTileButtonsType.merge;
+            }
+
             return ExerciseTile(
               key: Key('Exercise ${exercise.id}'),
               id: exercise.id,
@@ -39,6 +50,31 @@ class ExercisesListView extends StatelessWidget {
                   ExerciseDeletePressed(exerciseId: id),
                 );
               },
+              onAboveClick: (int id) {
+                if (buttonsType == ExerciseTileButtonsType.merge) {
+                  BlocProvider.of<ExercisesBloc>(context).add(
+                    ExerciseMergeUpPressed(exerciseId: id),
+                  );
+                } else if (buttonsType ==
+                    ExerciseTileButtonsType.moveSuperset) {
+                  BlocProvider.of<ExercisesBloc>(context).add(
+                    SupersetMoveUpPressed(exerciseId: id),
+                  );
+                }
+              },
+              onBelowClick: (int id) {
+                if (buttonsType == ExerciseTileButtonsType.merge) {
+                  BlocProvider.of<ExercisesBloc>(context).add(
+                    ExerciseMergeDownPressed(exerciseId: id),
+                  );
+                } else if (buttonsType ==
+                    ExerciseTileButtonsType.moveSuperset) {
+                  BlocProvider.of<ExercisesBloc>(context).add(
+                    SupersetMoveDownPressed(exerciseId: id),
+                  );
+                }
+              },
+              buttonsType: buttonsType,
             );
           },
           onReorder: (int oldIndex, int newIndex) {

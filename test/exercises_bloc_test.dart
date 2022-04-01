@@ -14,6 +14,7 @@ void main() {
     'exercises reordering',
     () {
       late ExercisesBloc exercisesBloc;
+      late ExercisesBloc exercisesBloc2;
 
       setUp(() {
         exercisesBloc = ExercisesBloc(
@@ -27,6 +28,24 @@ void main() {
                 {"id": 5, "order": 3, "order_prefix": ""},
                 {"id": 6, "order": 4, "order_prefix": "a"},
                 {"id": 7, "order": 4, "order_prefix": "b"},
+              ].map((e) => OrderedExercise.fromJson(e)).toList(),
+            ),
+          ),
+          exercisesReorderer: ExercisesReorderer(),
+        );
+
+        exercisesBloc2 = ExercisesBloc(
+          exerciseRepository: ExerciseRepository(
+            exercisesDataSource: InMemoryExercisesDatasource(
+              exercises: [
+                {"id": 1, "order": 1, "order_prefix": ""},
+                {"id": 2, "order": 2, "order_prefix": "a"},
+                {"id": 3, "order": 2, "order_prefix": "b"},
+                {"id": 4, "order": 2, "order_prefix": "c"},
+                {"id": 5, "order": 3, "order_prefix": ""},
+                {"id": 6, "order": 4, "order_prefix": ""},
+                {"id": 7, "order": 5, "order_prefix": "a"},
+                {"id": 8, "order": 5, "order_prefix": "b"},
               ].map((e) => OrderedExercise.fromJson(e)).toList(),
             ),
           ),
@@ -284,6 +303,246 @@ void main() {
               SingleExercise(id: 7),
             ]),
           ])
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'merge exercise with superset above works correctly',
+        build: () => exercisesBloc,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(ExerciseMergeUpPressed(exerciseId: 5));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4),
+              SingleExercise(id: 5),
+            ]),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ]),
+          ])
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'merge exercise with superset below works correctly',
+        build: () => exercisesBloc,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(ExerciseMergeDownPressed(exerciseId: 5));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4),
+            ]),
+            Superset(exercises: [
+              SingleExercise(id: 5),
+              SingleExercise(id: 6),
+              SingleExercise(id: 7),
+            ]),
+          ])
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'merge exercise with exercise below works correctly',
+        build: () => exercisesBloc2,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(ExerciseMergeDownPressed(exerciseId: 5));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            SingleExercise(id: 6),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4),
+            ]),
+            Superset(exercises: [
+              SingleExercise(id: 5),
+              SingleExercise(id: 6),
+            ]),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ]),
+          ])
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'merge exercise with exercise above works correctly',
+        build: () => exercisesBloc2,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(ExerciseMergeUpPressed(exerciseId: 6));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            SingleExercise(id: 6),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4),
+            ]),
+            Superset(exercises: [
+              SingleExercise(id: 5),
+              SingleExercise(id: 6),
+            ]),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ]),
+          ])
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'move superset up works correctly',
+        build: () => exercisesBloc2,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(SupersetMoveUpPressed(exerciseId: 2));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            SingleExercise(id: 6),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 1),
+            SingleExercise(id: 5),
+            SingleExercise(id: 6),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ])
+          ]),
+        ],
+      );
+
+      blocTest<ExercisesBloc, ExercisesState>(
+        'move superset down works correctly',
+        build: () => exercisesBloc2,
+        act: (bloc) {
+          bloc.add(ExercisesLoadStarted());
+          bloc.add(SupersetMoveDownPressed(exerciseId: 2));
+        },
+        expect: () => [
+          ExercisesLoadInProgress(),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 5),
+            SingleExercise(id: 6),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ])
+          ]),
+          ExercisesLoadSuccess(exercises: const [
+            SingleExercise(id: 1),
+            SingleExercise(id: 5),
+            Superset(exercises: [
+              SingleExercise(id: 2),
+              SingleExercise(id: 3),
+              SingleExercise(id: 4)
+            ]),
+            SingleExercise(id: 6),
+            Superset(exercises: [
+              SingleExercise(id: 7),
+              SingleExercise(id: 8),
+            ])
+          ]),
         ],
       );
     },
