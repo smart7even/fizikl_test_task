@@ -196,14 +196,14 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
                     i,
                     Superset(
                       exercises: [
-                        secondExercise,
                         exercise,
+                        secondExercise,
                       ],
                     ),
                   );
                 } else if (secondExercise is Superset) {
                   curState.exercises.removeAt(i);
-                  secondExercise.exercises.add(exercise);
+                  secondExercise.exercises.insert(0, exercise);
                 }
               }
             }
