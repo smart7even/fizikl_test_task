@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'exercise_tile_arrow_buttons.dart';
+
 enum ExerciseTileButtonsType { disabled, merge, moveSuperset }
 
 class ExerciseTile extends StatelessWidget {
@@ -27,47 +29,11 @@ class ExerciseTile extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Row(
-      children: [
-        Material(
-          color: Colors.transparent,
-          type: MaterialType.button,
-          child: IconButton(
-            padding: EdgeInsets.all(5),
-            onPressed: () {
-              onAboveClick(id);
-            },
-            icon: Icon(
-              Icons.arrow_upward,
-              color: buttonsType == ExerciseTileButtonsType.merge
-                  ? Colors.black
-                  : Colors.blue,
-            ),
-            tooltip: buttonsType == ExerciseTileButtonsType.merge
-                ? "Merge with exercise above"
-                : "Move superset up",
-          ),
-        ),
-        Material(
-          color: Colors.transparent,
-          child: IconButton(
-            padding: EdgeInsets.all(5),
-            onPressed: () {
-              onBelowClick(id);
-            },
-            icon: Icon(
-              Icons.arrow_downward,
-              color: buttonsType == ExerciseTileButtonsType.merge
-                  ? Colors.black
-                  : Colors.blue,
-            ),
-            tooltip: buttonsType == ExerciseTileButtonsType.merge
-                ? "Merge with exercise below"
-                : "Move superset down",
-          ),
-        )
-      ],
-    );
+    return ExerciceTileArrowButtons(
+        onAboveClick: onAboveClick,
+        id: id,
+        buttonsType: buttonsType,
+        onBelowClick: onBelowClick);
   }
 
   @override
